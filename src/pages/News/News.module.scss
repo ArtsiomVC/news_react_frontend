@@ -1,0 +1,9 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  > a {
+    margin-bottom: -0.3rem;
+  }
+}

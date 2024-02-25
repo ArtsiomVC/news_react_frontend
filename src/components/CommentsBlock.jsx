@@ -1,4 +1,6 @@
-import React from "react";
+import Typography from '@mui/material/Typography';
+import React, { Fragment } from 'react';
+import { getDateFormat } from '../utils';
 
 import { SideBlock } from "./SideBlock";
 import ListItem from "@mui/material/ListItem";
@@ -20,7 +22,7 @@ export const CommentsBlock = ({ items, children, isLoading = true }) => {
                 {isLoading ? (
                   <Skeleton variant="circular" width={40} height={40} />
                 ) : (
-                  <Avatar alt={obj.user.fullName} src={obj.user.avatarUrl} />
+                  <Avatar alt={obj.user.name} src={obj.user.avatarUrl} />
                 )}
               </ListItemAvatar>
               {isLoading ? (
@@ -30,7 +32,19 @@ export const CommentsBlock = ({ items, children, isLoading = true }) => {
                 </div>
               ) : (
                 <ListItemText
-                  primary={obj.user.fullName}
+                  primary={
+                    <Fragment>
+                        {obj.user.name}
+                      <Typography
+                        sx={{ display: 'inline', marginLeft: 0.8 }}
+                        component="span"
+                        color="text.secondary"
+                        variant="body2"
+                      >
+                        {getDateFormat(obj.createdAt)}
+                      </Typography>
+                    </Fragment>
+                  }
                   secondary={obj.text}
                 />
               )}
