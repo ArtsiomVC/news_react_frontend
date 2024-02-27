@@ -4,20 +4,17 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import SimpleMDE from 'react-simplemde-editor';
 
 import 'easymde/dist/easymde.min.css';
 import axios from '../../axios';
-import { selectIsAuth } from '../../redux/slices/auth';
 import styles from './AddNews.module.scss';
 
 export const AddNews = ({ isEditing = false }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const isAuth = useSelector(selectIsAuth);
   const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setLoading] = useState(false);
   const inputFileRef = useRef(null);
@@ -102,10 +99,6 @@ export const AddNews = ({ isEditing = false }) => {
   useEffect(() => {
     if (id) getNews();
   }, []);
-
-  if (!window.localStorage.getItem('token') && !isAuth) {
-    return <Navigate to="/login" />;
-  }
 
   return (
     <Paper style={{ padding: 30 }}>

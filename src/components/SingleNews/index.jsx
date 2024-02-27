@@ -4,7 +4,6 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import EyeIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import CommentIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchRemoveNews } from '../../redux/slices/news';
@@ -37,8 +36,7 @@ export const SingleNews = ({
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullNews })}>
-      {isEditable && (
-        <div className={styles.editButtons}>
+      {isEditable && (<div className={styles.editButtons}>
           <Link to={`/news/${id}/edit`}>
             <IconButton color="primary">
               <EditIcon />
@@ -47,15 +45,13 @@ export const SingleNews = ({
           <IconButton onClick={onClickRemove} color="secondary">
             <DeleteIcon />
           </IconButton>
-        </div>
-      )}
-      {imageUrl && (
-        <img
-          className={clsx(styles.image, { [styles.imageFull]: isFullNews })}
-          src={imageUrl}
-          alt={title}
-        />
-      )}
+        </div>)}
+      <img
+        className={clsx(styles.image, { [styles.imageFull]: isFullNews })}
+        src={imageUrl || '/nonews.png'}
+        alt={title}
+      />
+
       <div className={styles.wrapper}>
         <UserInfo {...user} additionalText={createdAt} />
         <div className={styles.indention}>
@@ -63,11 +59,9 @@ export const SingleNews = ({
             {isFullNews ? title : <Link to={`/news/${id}`}>{title}</Link>}
           </h2>
           <ul className={styles.tags}>
-            {tags.map((name) => (
-              <li key={name}>
+            {tags.map((name) => (<li key={name}>
                 <Link to={`/news?tag=${name}`}>#{name}</Link>
-              </li>
-            ))}
+              </li>))}
           </ul>
           <ul className={styles.newsDetails}>
             <li>
@@ -77,6 +71,5 @@ export const SingleNews = ({
           </ul>
         </div>
       </div>
-    </div>
-  );
+    </div>);
 };

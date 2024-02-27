@@ -11,6 +11,7 @@ export const Header = () => {
   const { isLoading, userData } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const token = window.localStorage.getItem('token');
+  const isAuth = (isLoading && token) || userData;
 
   const onClickLogout = () => {
     dispatch(logout());
@@ -21,11 +22,13 @@ export const Header = () => {
     <div className={styles.root}>
       <Container maxWidth="lg">
         <div className={styles.inner}>
-          <Link className={styles.logo} to="/news">
-            <div>NEWS</div>
-          </Link>
+          {isAuth && (
+            <Link className={styles.logo} to="/news">
+              <div>NEWS</div>
+            </Link>
+          )}
           <div className={styles.buttons}>
-            {(isLoading && token) || userData ? (
+            {isAuth ? (
               <>
                 <Link to="/add-news">
                   <Button variant="contained">Добавить новость</Button>

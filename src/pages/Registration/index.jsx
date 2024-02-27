@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -15,25 +15,27 @@ import styles from './Login.module.scss';
 export const Registration = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { isLoading, userData } = useSelector(state => state.auth);
+  const { userData } = useSelector(state => state.auth);
   const isAuth = Boolean(userData);
+  const [isLoading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     setError,
     formState: {
       errors,
-      isValid
-    }
+      isValid,
+    },
   } = useForm({
     defaultValues: {
       email: 'test@mail.com',
       password: '12345',
-      name: 'test user'
+      name: 'Test user',
     },
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       const { payload } = await dispatch(fetchRegister(values));
 
@@ -41,15 +43,9 @@ export const Registration = () => {
 
       if (payload.hasOwnProperty('errorMessage')) {
         enqueueSnackbar(payload.errorMessage, { variant: 'error' });
-        return;
-      }
-
-      if (payload.hasOwnProperty('errors')) {
+      } else if (payload.hasOwnProperty('errors')) {
         payload.errors.forEach(({ path, msg }) => setError(path, { message: msg }))
-        return;
-      }
-
-      if (payload.hasOwnProperty('token')) {
+      } else if (payload.hasOwnProperty('token')) {
         window.localStorage.setItem('token', payload.token);
         enqueueSnackbar('Регистрация прошла успешно.', { variant: 'success' });
       }
@@ -57,6 +53,7 @@ export const Registration = () => {
       enqueueSnackbar('Не удалось зарегистрироваться.', { variant: 'error' });
       console.log(err);
     }
+    setLoading(false);
   };
 
   if (isAuth) {
@@ -69,10 +66,7 @@ export const Registration = () => {
         Создание аккаунта
       </Typography>
       <div className={styles.avatar}>
-        <Avatar sx={{
-          width: 100,
-          height: 100
-        }} />
+        <Avatar sx={{ width: 100, height: 100 }} />
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField

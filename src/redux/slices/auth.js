@@ -38,7 +38,7 @@ const authSlice = createSlice({
     }
   },
   extraReducers: {
-    [fetchAuth.pending]: (state, action) => {
+    [fetchAuth.pending]: (state) => {
       state.userData = null;
       state.isLoading = true;
     },
@@ -64,15 +64,12 @@ const authSlice = createSlice({
     },
     [fetchRegister.pending]: (state) => {
       state.userData = null;
-      state.isLoading = true;
     },
     [fetchRegister.fulfilled]: (state, action) => {
       state.userData = action.payload;
-      state.isLoading = false;
     },
     [fetchRegister.rejected]: (state) => {
       state.userData = null;
-      state.isLoading = false;
     },
   }
 });
